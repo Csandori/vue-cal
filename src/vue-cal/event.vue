@@ -193,6 +193,57 @@ export default {
     },
 
     eventStyles () {
+      if (this.event.allDay) {
+        // 4 option
+        // 1: Start and end are in the view date range
+        // 2: Start is before but the end is in the view date range
+        // 3: Start is in but the end is out of the view date range
+        // 4: All out
+        let startDate = null
+        let endDate = null
+        // 1st option
+        if (
+          this.event.end <= this.view.endDate &&
+          this.event.start >= this.view.startDate
+        ) {
+          startDate = this.event.start
+          endDate = this.event.end
+          // 2nd
+        }
+        else if (
+          this.event.end <= this.view.endDate &&
+          this.event.start <= this.view.startDate
+        ) {
+          startDate = this.view.startDate
+          endDate = this.event.end
+          // 3rd
+        }
+        else if (
+          this.event.end >= this.view.endDate &&
+          this.event.start >= this.view.startDate
+        ) {
+          startDate = this.event.start
+          endDate = this.view.endDate
+          // 4th
+        }
+        else {
+          startDate = this.view.startDate
+          endDate = this.view.endDate
+        }
+
+        let lengthInDays = 1
+        let tempDate = new Date(startDate)
+        for (
+          ;
+          tempDate.getMonth() < endDate.getMonth() ||
+          (tempDate.getMonth() === endDate.getMonth() &&
+            tempDate.getDate() < endDate.getDate());
+          tempDate = tempDate.addDays(1)
+        ) {
+          lengthInDays++
+        }
+        return { width: lengthInDays * 100 + '%' }
+      }
       if (this.event.allDay || !this.vuecal.time || !this.event.endTimeMinutes || this.view.id === 'month' || this.allDay) return {}
       let width = 100 / Math.min(this.overlaps.length + 1, this.overlapsStreak)
       let left = (100 / (this.overlaps.length + 1)) * this.eventPosition

@@ -412,8 +412,29 @@ export default class EventUtils {
    * @return {Boolean} true if in range, even partially.
    */
   eventInRange (event, start, end) {
+    function isDateSmallerEqual (date1, date2) {
+      if (date1.getFullYear() < date2.getFullYear()) { console.log(1); return true }
+      if (date1.getFullYear() === date2.getFullYear() && date1.getMonth() < date2.getMonth()) { return true }
+      if (date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() <= date2.getDate()) { return true }
+      return false
+    }
+
     // Check if all-day or timeless event (if date but no time there won't be a `:` in event.start).
     if (event.allDay || !this._vuecal.time) {
+      const view = this._vuecal.view
+      if (
+        view.id === 'week' &&
+          event.allDay &&
+          view.startDate.getTime() === start.getTime()
+      ) {
+        if (
+          isDateSmallerEqual(event.start, end) &&
+            isDateSmallerEqual(start, event.end)
+        ) {
+          return true
+        }
+      }
+
       // Get the date and discard the time if any, then check it's within the date range.
       const eventStart = new Date(event.start).setHours(0, 0, 0, 0)
       return (eventStart >= new Date(start).setHours(0, 0, 0, 0) &&
