@@ -11,7 +11,7 @@ const routes = [
   },
   {
     path: '/test',
-    component: () => import(/* webpackChunkName: "isolated-test-view" */ '@/documentation/isolated-test-view.vue')
+    component: () => import(/* webpackChunkName: "isolated-test-view" */ '@/documentation/csandortest.vue')
   }
 ]
 

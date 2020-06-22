@@ -35,7 +35,8 @@ export default class EventUtils {
     background: false,
     allDay: false,
     segments: null,
-    repeat: null,
+    repeat: false,
+    repeatOptions:{years:[],months:[],dayOfMonth:[],dayOfWeek:[],interval:1,until:null,exclude:[]},
     daysCount: 1,
     deletable: true,
     deleting: false,
@@ -411,7 +412,28 @@ export default class EventUtils {
    * @param {Date} end The end of range date object.
    * @return {Boolean} true if in range, even partially.
    */
-  eventInRange (event, start, end) {
+  eventInRange (event, start, end, isItFromCell) {
+    console.log('start')
+    console.log(start)
+    console.log('end')
+    console.log(end)
+    //Check recurring
+    if(event.repeat){
+      let returnValue=false;
+      let dates= event.repeatDates
+      if (start.getFullYear() in dates) {
+        if (start.getMonth() in dates[start.getFullYear()])
+        {
+          if(isItFromCell){
+            for (let el of dates[start.getFullYear()][start.getMonth()]){if(el.isItSameDay(start)){returnValue=true; break;}}
+          } else {
+            returnValue=true 
+          }
+        }
+      }
+      return returnValue
+    }
+
     // Check if all-day or timeless event (if date but no time there won't be a `:` in event.start).
     if (event.allDay || !this._vuecal.time) {
       // Get the date and discard the time if any, then check it's within the date range.
@@ -424,5 +446,18 @@ export default class EventUtils {
     const startTimestamp = event.start.getTime()
     const endTimestamp = event.end.getTime()
     return startTimestamp < end.getTime() && endTimestamp > start.getTime()
+  }
+  
+  createInstancesForRepeatedEvents(event){
+  let temp=event
+  let options = event.repeatOptions
+  console.log('temp')
+  console.log(temp)
+  return temp
+  }
+
+  checkRepeatEventIsInRange(event,start,end){
+    // start later
+    return true
   }
 }

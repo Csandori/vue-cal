@@ -602,7 +602,7 @@ export default {
         // Save out of scope events into the view object separated from the array of in-scope events.
         this.view.outOfScopeEvents = []
         events.forEach(e => {
-          if (ue.eventInRange(e, firstCellDate, startDate) || ue.eventInRange(e, endDate, lastCellDate)) {
+          if (ue.eventInRange(e, firstCellDate, startDate, false) || ue.eventInRange(e, endDate, lastCellDate, false)) {
             // Only add events to the view.outOfScopeEvents array if not already in view.events
             // (multiple-day events case).
             if (!this.view.events.some(e2 => e2._eid === e._eid)) this.view.outOfScopeEvents.push(e)
@@ -974,11 +974,57 @@ export default {
           end,
           endTimeMinutes,
           daysCount: multipleDays ? ud.countDays(start, end) : 1,
-          class: event.class
+          class: event.class,
         })
+        if (event.repeat){
+          this.setEventRepeatDates(event);
+        }
 
         this.mutableEvents.push(event)
       })
+    },
+
+    /**
+    * calculate dates from the repeatdata
+    */
+    setEventRepeatDates(event){
+      if(event.start>event.repeatOptions.until) return
+
+      let options = event.repeatOptions;
+      let start = event.start
+      // If until null calculate till today+100days 
+      // Should be adjustable
+      let until = options.until===null?new Date().addDays(100):options.until
+      let yearFlag=Boolean(options.years.length)
+      let monthFlag=Boolean(options.months.length)
+      let dayOfMonthFlag=Boolean(options.dayOfMonth.length)
+      let dayOfWeekFlag=Boolean(options.dayOfWeek.length)
+      let interval= options.interval
+      let startDateForLoop=start
+      event.repeatDates={}
+      for(let i =0;startDateForLoop<until;startDateForLoop=startDateForLoop.addDays(1), i++){
+        if(yearFlag && !options.years.includes(startDateForLoop.getFullYear())){
+          continue;
+        }
+        if(monthFlag && !options.months.includes(startDateForLoop.getMonth())){
+          continue;
+        }
+         if(dayOfMonthFlag && !options.dayOfMonth.includes(startDateForLoop.getDate())){
+          continue;
+        }
+         if(dayOfWeekFlag && !options.dayOfWeek.includes(startDateForLoop.getDay())){
+          continue;
+        }
+        if(i%interval==0){
+          if(!(startDateForLoop.getFullYear() in event.repeatDates)){
+            event.repeatDates[startDateForLoop.getFullYear()]={}
+          }
+          if (!(startDateForLoop.getMonth() in event.repeatDates[startDateForLoop.getFullYear()])){
+            event.repeatDates[startDateForLoop.getFullYear()][startDateForLoop.getMonth()]=[]
+          }
+          event.repeatDates[startDateForLoop.getFullYear()][startDateForLoop.getMonth()].push(startDateForLoop)
+        }
+      }
     },
 
     /**

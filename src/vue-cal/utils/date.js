@@ -38,6 +38,7 @@ export default class DateUtils {
     Date.prototype.isLeapYear = function () { return self.isLeapYear(this) }
     Date.prototype.format = function (format = 'YYYY-MM-DD') { return self.formatDate(this, format) }
     Date.prototype.formatTime = function (format = 'HH:mm') { return self.formatTime(this, format) }
+    Date.prototype.isItSameDay = function (date1) { return self.isItSameDay(this, date1) }
     /* eslint-enable no-extend-native */
   }
 
@@ -53,6 +54,7 @@ export default class DateUtils {
     delete Date.prototype.isLeapYear
     delete Date.prototype.format
     delete Date.prototype.formatTime
+    delete Date.prototype.isItSameDay
   }
 
   updateTexts (texts) {
@@ -124,6 +126,11 @@ export default class DateUtils {
   isLeapYear (date) {
     const year = date.getFullYear()
     return !(year % 400) || (year % 100 && !(year % 4))
+  }
+
+  isItSameDay(date, date1){
+    if(date.getFullYear()==date1.getFullYear()&&date.getMonth()===date1.getMonth()&&date.getDate()===date1.getDate()) return true
+    return false
   }
 
   // Returns today if it's FirstDayOfWeek (Monday or Sunday) or previous FirstDayOfWeek otherwise.
