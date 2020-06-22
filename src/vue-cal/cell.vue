@@ -344,7 +344,7 @@ export default {
         }
 
         // Only keep events in cell time range.
-        events = events.filter(e => this.utils.event.eventInRange(e, cellStart, cellEnd, 'fromCell'))
+        events = events.filter(e => this.utils.event.eventInRange(e, cellStart, cellEnd, true))
 
         if (this.options.showAllDayEvents && this.view.id !== 'month') events = events.filter(e => !!e.allDay === this.allDay)
 

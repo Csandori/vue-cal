@@ -10,8 +10,8 @@
         v-for="n in 7"
         v-model="dayOfWeek"
         :key="n"
-        :label="(n - 1).toString()"
-        :value="n"
+        :label="(n-1).toString()"
+        :value="(parseInt(n)-1)"
       ></v-checkbox>
     </div>
     <div style="display:flex">
@@ -20,8 +20,8 @@
         v-for="n in 12"
         v-model="months"
         :key="n"
-        :label="n.toString()"
-        :value="n"
+        :label="(n-1).toString()"
+        :value="(n-1)"
       ></v-checkbox>
     </div>
     <div style="display:flex">
