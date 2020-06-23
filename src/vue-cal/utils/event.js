@@ -413,7 +413,7 @@ export default class EventUtils {
    */
   eventInRange (event, start, end) {
     function isDateSmallerEqual (date1, date2) {
-      if (date1.getFullYear() < date2.getFullYear()) { console.log(1); return true }
+      if (date1.getFullYear() < date2.getFullYear()) { return true }
       if (date1.getFullYear() === date2.getFullYear() && date1.getMonth() < date2.getMonth()) { return true }
       if (date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() <= date2.getDate()) { return true }
       return false
@@ -424,14 +424,20 @@ export default class EventUtils {
       const view = this._vuecal.view
       if (
         view.id === 'week' &&
-          event.allDay &&
-          view.startDate.getTime() === start.getTime()
+          event.allDay
       ) {
-        if (
+        if ((
           isDateSmallerEqual(event.start, end) &&
-            isDateSmallerEqual(start, event.end)
+            isDateSmallerEqual(start, event.start)) ||
+            (view.startDate.getTime() === start.getTime() &&
+            isDateSmallerEqual(event.start, view.startDate) &&
+            isDateSmallerEqual(view.startDate, event.end))
         ) {
+          console.log('betéve')
           return true
+        }
+        else {
+          return false
         }
       }
 

@@ -19,7 +19,6 @@ div.test-view
     :editable-events="{ title: false, drag: false, resize: false, delete: true, create: true }"
     :events="events"
     :drag-to-create-event="false"
-    :split-days="daySplits"
     :on-event-click="onEventClick"
     :min-split-width="150"
     sticky-split-labels)
@@ -48,22 +47,9 @@ export default {
       // },
       {
         start: new Date(new Date(now).setHours(1, 0, 0)),
-        end: new Date(new Date(now).setHours(4, 0, 0)),
+        end: new Date(new Date(now).addDays(14)),
         allDay: true,
-        title: 'Event 1',
-        split: 2
-      },
-      {
-        start: new Date(new Date(now).setHours(1, 0, 0)),
-        end: new Date(new Date(now).setHours(4, 0, 0)),
-        title: 'Event 2',
-        split: 1
-      },
-      {
-        start: new Date(new Date(now).setHours(3, 0, 0)),
-        end: new Date(new Date(now).setHours(5, 0, 0)),
-        title: 'Event 3',
-        split: 2
+        title: 'Event 1'
       }
     ],
     daySplits: [
