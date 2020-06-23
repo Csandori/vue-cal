@@ -39,12 +39,12 @@
   </div>
 </template>
 <script>
-import VueCal from "@/vue-cal";
-let now = new Date().subtractMinutes(840);
-let first = new Date().subtractDays(500);
+import VueCal from '@/vue-cal'
+const now = new Date().subtractMinutes(840)
+const first = new Date().subtractDays(500)
 export default {
   components: { VueCal },
-  data() {
+  data () {
     return {
       interval: 1,
       years: [],
@@ -54,20 +54,20 @@ export default {
       selectedDate: now,
       recurringEvents: [
         {
-          title: "event",
+          title: 'event',
           recurring: true,
           recurringOptions: { start: first, end: now }
         }
       ]
-    };
+    }
   },
   computed: {
-    events() {
+    events () {
       return [
         {
-          title: "event",
-          start:now,
-          end:now.addMinutes(120),
+          title: 'event',
+          start: now,
+          end: now.addMinutes(120),
           repeat: true,
           repeatOptions: {
             until: now.addDays(250),
@@ -78,22 +78,19 @@ export default {
             interval: this.interval
           }
         }
-      ];
+      ]
     },
-    dates: function() {
-      const event = this.events[0];
-      let date = event.start;
-
-      return [];
+    dates: function () {
+      return []
     }
   },
   methods: {
-    log(...params) {
+    log (...params) {
       // eslint-disable-next-line
-      console.log(...params);
+      console.log(...params)
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

@@ -128,8 +128,10 @@ export default class DateUtils {
     return !(year % 400) || (year % 100 && !(year % 4))
   }
 
-  isItSameDay(date, date1){
-    if(date.getFullYear()==date1.getFullYear()&&date.getMonth()===date1.getMonth()&&date.getDate()===date1.getDate()) return true
+  isItSameDay (date, date1) {
+    if (date.getFullYear() === date1.getFullYear() &&
+    date.getMonth() === date1.getMonth() &&
+    date.getDate() === date1.getDate()) return true
     return false
   }
 

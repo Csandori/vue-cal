@@ -974,10 +974,10 @@ export default {
           end,
           endTimeMinutes,
           daysCount: multipleDays ? ud.countDays(start, end) : 1,
-          class: event.class,
+          class: event.class
         })
-        if (event.repeat){
-          this.setEventRepeatDates(event);
+        if (event.repeat) {
+          this.setEventRepeatDates(event)
         }
 
         this.mutableEvents.push(event)
@@ -987,40 +987,40 @@ export default {
     /**
     * calculate dates from the repeatdata
     */
-    setEventRepeatDates(event){
-      if(event.start>event.repeatOptions.until) return
+    setEventRepeatDates (event) {
+      if (event.start > event.repeatOptions.until) return
 
-      let options = event.repeatOptions;
-      let start = event.start
-      // If until null calculate till today+100days 
+      const options = event.repeatOptions
+      const start = event.start
+      // If until null calculate till today+100days
       // Should be adjustable
-      let until = options.until===null?new Date().addDays(100):options.until
-      let yearFlag=Boolean(options.years.length)
-      let monthFlag=Boolean(options.months.length)
-      let dayOfMonthFlag=Boolean(options.dayOfMonth.length)
-      let dayOfWeekFlag=Boolean(options.dayOfWeek.length)
-      let interval= options.interval
-      let startDateForLoop=start
-      event.repeatDates={}
-      for(let i =0;startDateForLoop<until;startDateForLoop=startDateForLoop.addDays(1), i++){
-        if(yearFlag && !options.years.includes(startDateForLoop.getFullYear())){
-          continue;
+      const until = options.until === null ? new Date().addDays(100) : options.until
+      const yearFlag = Boolean(options.years.length)
+      const monthFlag = Boolean(options.months.length)
+      const dayOfMonthFlag = Boolean(options.dayOfMonth.length)
+      const dayOfWeekFlag = Boolean(options.dayOfWeek.length)
+      const interval = options.interval
+      let startDateForLoop = start
+      event.repeatDates = {}
+      for (let i = 0; startDateForLoop < until; startDateForLoop = startDateForLoop.addDays(1), i++) {
+        if (yearFlag && !options.years.includes(startDateForLoop.getFullYear())) {
+          continue
         }
-        if(monthFlag && !options.months.includes(startDateForLoop.getMonth())){
-          continue;
+        if (monthFlag && !options.months.includes(startDateForLoop.getMonth())) {
+          continue
         }
-         if(dayOfMonthFlag && !options.dayOfMonth.includes(startDateForLoop.getDate())){
-          continue;
+        if (dayOfMonthFlag && !options.dayOfMonth.includes(startDateForLoop.getDate())) {
+          continue
         }
-         if(dayOfWeekFlag && !options.dayOfWeek.includes(startDateForLoop.getDay())){
-          continue;
+        if (dayOfWeekFlag && !options.dayOfWeek.includes(startDateForLoop.getDay())) {
+          continue
         }
-        if(i%interval==0){
-          if(!(startDateForLoop.getFullYear() in event.repeatDates)){
-            event.repeatDates[startDateForLoop.getFullYear()]={}
+        if (i % interval === 0) {
+          if (!(startDateForLoop.getFullYear() in event.repeatDates)) {
+            event.repeatDates[startDateForLoop.getFullYear()] = {}
           }
-          if (!(startDateForLoop.getMonth() in event.repeatDates[startDateForLoop.getFullYear()])){
-            event.repeatDates[startDateForLoop.getFullYear()][startDateForLoop.getMonth()]=[]
+          if (!(startDateForLoop.getMonth() in event.repeatDates[startDateForLoop.getFullYear()])) {
+            event.repeatDates[startDateForLoop.getFullYear()][startDateForLoop.getMonth()] = []
           }
           event.repeatDates[startDateForLoop.getFullYear()][startDateForLoop.getMonth()].push(startDateForLoop)
         }

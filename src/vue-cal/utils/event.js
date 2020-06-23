@@ -36,7 +36,7 @@ export default class EventUtils {
     allDay: false,
     segments: null,
     repeat: false,
-    repeatOptions:{years:[],months:[],dayOfMonth:[],dayOfWeek:[],interval:1,until:null,exclude:[]},
+    repeatOptions: { years: [], months: [], dayOfMonth: [], dayOfWeek: [], interval: 1, until: null, exclude: [] },
     daysCount: 1,
     deletable: true,
     deleting: false,
@@ -413,21 +413,17 @@ export default class EventUtils {
    * @return {Boolean} true if in range, even partially.
    */
   eventInRange (event, start, end, isItFromCell) {
-    console.log('start')
-    console.log(start)
-    console.log('end')
-    console.log(end)
-    //Check recurring
-    if(event.repeat){
-      let returnValue=false;
-      let dates= event.repeatDates
+    // Check recurring
+    if (event.repeat) {
+      let returnValue = false
+      const dates = event.repeatDates
       if (start.getFullYear() in dates) {
-        if (start.getMonth() in dates[start.getFullYear()])
-        {
-          if(isItFromCell){
-            for (let el of dates[start.getFullYear()][start.getMonth()]){if(el.isItSameDay(start)){returnValue=true; break;}}
-          } else {
-            returnValue=true 
+        if (start.getMonth() in dates[start.getFullYear()]) {
+          if (isItFromCell) {
+            for (const el of dates[start.getFullYear()][start.getMonth()]) { if (el.isItSameDay(start)) { returnValue = true; break } }
+          }
+          else {
+            returnValue = true
           }
         }
       }
@@ -446,18 +442,5 @@ export default class EventUtils {
     const startTimestamp = event.start.getTime()
     const endTimestamp = event.end.getTime()
     return startTimestamp < end.getTime() && endTimestamp > start.getTime()
-  }
-  
-  createInstancesForRepeatedEvents(event){
-  let temp=event
-  let options = event.repeatOptions
-  console.log('temp')
-  console.log(temp)
-  return temp
-  }
-
-  checkRepeatEventIsInRange(event,start,end){
-    // start later
-    return true
   }
 }
