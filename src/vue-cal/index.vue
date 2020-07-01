@@ -292,6 +292,7 @@ export default {
       // All the possible events/cells interractions:
       // e.g. focus, click, click & hold, resize, drag & drop (coming).
       domEvents: {
+        mouseDatePosition: null,
         resizeAnEvent: {
           _eid: null, // Only one at a time.
           start: null,
@@ -832,7 +833,7 @@ export default {
      * @param {Object} e the native DOM event object.
      */
     eventDragCreation (e) {
-      const { dragCreateAnEvent } = this.domEvents
+      const { dragCreateAnEvent, mouseDatePosition } = this.domEvents
       const { start, startCursorY, split } = dragCreateAnEvent
       const timeAtCursor = new Date(start)
       const { minutes, cursorCoords: { y } } = this.minutesAtCursor(e)
@@ -876,8 +877,18 @@ export default {
 
         event.start = dragFromBottom ? start : timeAtCursor
         event.end = dragFromBottom ? timeAtCursor : start
+
+        if (mouseDatePosition) {
+          event.end.setFullYear(mouseDatePosition.getFullYear())
+          event.end.setMonth(mouseDatePosition.getMonth())
+          event.end.setDate(mouseDatePosition.getDate())
+        }
+
         event.startTimeMinutes = event.start.getHours() * 60 + event.start.getMinutes()
         event.endTimeMinutes = event.end.getHours() * 60 + event.end.getMinutes()
+
+        const eventUtil = this.utils.event
+        eventUtil.addEventSegment(event, true)
       }
     },
 

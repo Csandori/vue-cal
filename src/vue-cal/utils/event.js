@@ -119,9 +119,13 @@ export default class EventUtils {
    *
    * @param {Object} e the multiple-day event to add segment in.
    */
-  addEventSegment (e) {
+  addEventSegment (e, dragCreateFlag) {
     // If event was previously single-day, event.segments = null,
     // so first create the first segment (first day).
+
+    // There was a bug, don't know why. The event.end is different than the event end value when I check it. Now it's ok, but need to investigate!
+    if (dragCreateFlag) e.end = e.end.subtractDays(1)
+
     if (!e.segments) {
       Vue.set(e, 'segments', {})
       Vue.set(e.segments, ud.formatDateLite(e.start), {
