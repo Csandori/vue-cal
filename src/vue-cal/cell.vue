@@ -17,14 +17,13 @@ transition-group.vuecal__cell(
     @keypress.enter="onCellkeyPressEnter($event)"
     @touchstart="!isDisabled && onCellTouchStart($event, splitsCount ? split.id : null)"
     @mouseenter="!isDisabled && cellMouseEnter($event, $data, data.startDate)"
-    @mouseover="!isDisabled && cellMouseOver($event, $data, data.startDate)"
     @mouseleave="!isDisabled && cellMouseLeave($event, $data, data.startDate)"
     @mousedown="!isDisabled && onCellMouseDown($event, splitsCount ? split.id : null)"
     @click="!isDisabled && onCellClick($event)"
     @dblclick="!isDisabled && onCellDblClick($event)"
     @contextmenu="!isDisabled && options.cellContextmenu && onCellContextMenu($event)"
-    @dragenter="!isDisabled && editEvents.drag  && dnd && dnd.cellDragEnter($event, $data, data.startDate)"
-    @dragover="!isDisabled && editEvents.drag  && dnd && dnd.cellDragOver($event, $data, data.startDate, splitsCount ? split.id : null)"
+    @dragenter="!isDisabled && editEvents.drag && dnd && dnd.cellDragEnter($event, $data, data.startDate)"
+    @dragover="!isDisabled && editEvents.drag && dnd && dnd.cellDragOver($event, $data, data.startDate, splitsCount ? split.id : null)"
     @dragleave="!isDisabled && editEvents.drag && dnd && dnd.cellDragLeave($event, $data, data.startDate)"
     @drop="!isDisabled && editEvents.drag && dnd && dnd.cellDragDrop($event, $data, data.startDate, splitsCount ? split.id : null)")
     .vuecal__special-hours(
@@ -277,9 +276,6 @@ export default {
 
     cellMouseEnter ($event, $data, data) {
       this.domEvents.mouseDatePosition = data
-    },
-
-    cellMouseOver () {
     },
 
     cellMouseLeave () {
