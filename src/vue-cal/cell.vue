@@ -16,8 +16,8 @@ transition-group.vuecal__cell(
     @focus="onCellFocus($event)"
     @keypress.enter="onCellkeyPressEnter($event)"
     @touchstart="!isDisabled && onCellTouchStart($event, splitsCount ? split.id : null)"
-    @mouseenter="!isDisabled && cellMouseEnter($event, $data, data.startDate)"
-    @mouseleave="!isDisabled && cellMouseLeave($event, $data, data.startDate)"
+    @mouseenter="!isDisabled && cellMouseEnter(data.startDate)"
+    @mouseleave="!isDisabled && cellMouseLeave()"
     @mousedown="!isDisabled && onCellMouseDown($event, splitsCount ? split.id : null)"
     @click="!isDisabled && onCellClick($event)"
     @dblclick="!isDisabled && onCellDblClick($event)"
@@ -274,7 +274,7 @@ export default {
       this.vuecal.$emit('cell-contextmenu', { date, ...cursorCoords, ...(split || {}) })
     },
 
-    cellMouseEnter ($event, $data, data) {
+    cellMouseEnter (data) {
       this.domEvents.mouseDatePosition = data
     },
 

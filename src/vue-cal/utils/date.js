@@ -170,7 +170,7 @@ export default class DateUtils {
     // replace '-' with '/' for Safari.
     if (typeof start === 'string') start = start.replace(/-/g, '/')
     if (typeof end === 'string') end = end.replace(/-/g, '/')
-    
+
     // Set start & end at midnight then compare the delta. Don't modify the original dates.
     start = (new Date(start)).setHours(0, 0, 0, 0)
     // Set end at midnight plus 1 sec, so Math.ceil will round it up to a full day.
