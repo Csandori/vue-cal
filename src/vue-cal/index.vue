@@ -37,7 +37,7 @@
           template(v-slot:event="{ event, view }")
             slot(name="event" :view="view" :event="event")
               .vuecal__event-title.vuecal__event-title--edit(
-                v-if="editEvents.title && event.title && event.titleEditable"
+                v-if="editEvents.title && event.titleEditable"
                 contenteditable
                 @blur="onEventTitleBlur($event, event)"
                 v-html="event.title")
@@ -85,7 +85,7 @@
                 template(v-slot:event="{ event, view }")
                   slot(name="event" :view="view" :event="event")
                     .vuecal__event-title.vuecal__event-title--edit(
-                      v-if="editEvents.title && event.title && event.titleEditable"
+                      v-if="editEvents.title && event.titleEditable"
                       contenteditable
                       @blur="onEventTitleBlur($event, event)"
                       v-html="event.title")
@@ -119,7 +119,7 @@
                   template(v-slot:event="{ event, view }")
                     slot(name="event" :view="view" :event="event")
                       .vuecal__event-title.vuecal__event-title--edit(
-                        v-if="editEvents.title && event.title && event.titleEditable"
+                        v-if="editEvents.title && event.titleEditable"
                         contenteditable
                         @blur="onEventTitleBlur($event, event)"
                         v-html="event.title")
@@ -752,8 +752,11 @@ export default {
       // and if not dragging handle or deleting event.
       const eventClickHandler = typeof this.onEventClick === 'function'
       if (eventClicked && !hasResized && !isClickHoldingEvent && !dragCreatedEvent && eventClickHandler) {
-        const event = this.view.events.find(e => e._eid === focusAnEvent._eid)
-        return this.onEventClick(event, e)
+        let event = this.view.events.find(e => e._eid === focusAnEvent._eid)
+        // If not found, the event may be in the outOfScope array.
+        if (!event && this.isMonthView) event = this.view.outOfScopeEvents.find(e => e._eid === focusAnEvent._eid)
+
+        return event && this.onEventClick(event, e)
       }
     },
 
@@ -958,7 +961,8 @@ export default {
 
         // Correct the common practice to end at 00:00 or 24:00 to count a full day.
         if (!endTimeMinutes || endTimeMinutes === minutesInADay) {
-          end.setSeconds(-1) // End at 23:59:59.
+          // This also applies on timeless events, all-day events & multiple-day events.
+          end.setHours(23, 59, 59, 0)
           endDateF = ud.formatDateLite(end)
           endTimeMinutes = minutesInADay
         }
@@ -1242,7 +1246,7 @@ export default {
     }
 
     // https://github.com/antoniandre/vue-cal/issues/221
-    this.alignWithScrollbar()
+    if (!this.hideBody) this.alignWithScrollbar()
 
     // Emit the `ready` event with useful parameters.
     const startDate = this.view.startDate
@@ -1610,7 +1614,8 @@ export default {
         'vuecal--drag-creating-event': dragCreateAnEvent.event,
         'vuecal--dragging-event': dragAnEvent._eid,
         'vuecal--events-on-month-view': this.eventsOnMonthView,
-        'vuecal--short-events': this.isMonthView && this.eventsOnMonthView === 'short'
+        'vuecal--short-events': this.isMonthView && this.eventsOnMonthView === 'short',
+        'vuecal--has-touch': typeof window !== 'undefined' && 'ontouchstart' in window
       }
     },
     isYearsOrYearView () {
