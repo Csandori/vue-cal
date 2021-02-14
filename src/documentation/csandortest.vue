@@ -10,8 +10,8 @@
         v-for="n in 7"
         v-model="dayOfWeek"
         :key="n"
-        :label="(n-1).toString()"
-        :value="(parseInt(n)-1)"
+        :label="(n - 1).toString()"
+        :value="parseInt(n) - 1"
       ></v-checkbox>
     </div>
     <div style="display:flex">
@@ -20,8 +20,8 @@
         v-for="n in 12"
         v-model="months"
         :key="n"
-        :label="(n-1).toString()"
-        :value="(n-1)"
+        :label="(n - 1).toString()"
+        :value="n - 1"
       ></v-checkbox>
     </div>
     <div style="display:flex">
@@ -35,16 +35,19 @@
       ></v-checkbox>
     </div>
     {{ dates }}
-    <VueCal :events="events" />
+    <VueCal
+      :events="events"
+      @event-mouse-enter="log('event-mouse-enter', $event)"
+    />
   </div>
 </template>
 <script>
-import VueCal from '@/vue-cal'
-const now = new Date().subtractMinutes(840)
-const first = new Date().subtractDays(500)
+import VueCal from "@/vue-cal";
+const now = new Date().subtractMinutes(840);
+const first = new Date().subtractDays(500);
 export default {
   components: { VueCal },
-  data () {
+  data() {
     return {
       interval: 1,
       years: [],
@@ -54,18 +57,18 @@ export default {
       selectedDate: now,
       recurringEvents: [
         {
-          title: 'event',
+          title: "event",
           recurring: true,
           recurringOptions: { start: first, end: now }
         }
       ]
-    }
+    };
   },
   computed: {
-    events () {
+    events() {
       return [
         {
-          title: 'event',
+          title: "event",
           start: now,
           end: now.addMinutes(120),
           repeat: true,
@@ -77,20 +80,26 @@ export default {
             dayOfWeek: this.dayOfWeek,
             interval: this.interval
           }
+        },
+        {
+          title: "valami",
+          start: now.addMinutes(-400),
+          end: now.addMinutes(-240),
+          background: true
         }
-      ]
+      ];
     },
-    dates: function () {
-      return []
+    dates: function() {
+      return [];
     }
   },
   methods: {
-    log (...params) {
+    log(...params) {
       // eslint-disable-next-line
-      console.log(...params)
+      console.log(...params);
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
